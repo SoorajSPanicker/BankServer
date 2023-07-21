@@ -11,7 +11,7 @@ const register=(req,res)=>{ //body={acno:123,uname="anu",psw:"abc123"}
     //check acno is present in users collection
     users.findOne({acno}).then(user=>{//user contain value of findOne
         if(user){
-            res.send("user already exist")//.status(401)
+            res.status(401).send("user already exist")//.status(401)
         }
         else{
             //register user -create a new object for user
@@ -25,11 +25,23 @@ const register=(req,res)=>{ //body={acno:123,uname="anu",psw:"abc123"}
             //save the object in collection
             newUser.save()
             //response send //json() - convert data into json type and send
-            res.json(newUser)//.status(200)
+            res.status(200).json(newUser)//.status(200)
         }
     })
     // res.send("register working")
 }
+//logic for login
+const login=(req,res)=>{ //body={acno:1000,psw:}
+    const {acno,psw}=req.body
+    users.findOne({acno,psw}).then(user=>{
+        if(user){
+            res.status(200).json(user)
+        }
+        else{
+            res.status(401).json("incorrect account number or password")
+        }
+    })
+}
 module.exports={
-    register
+    register,login
 }
