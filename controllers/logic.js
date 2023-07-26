@@ -42,6 +42,23 @@ const login=(req,res)=>{ //body={acno:1000,psw:}
         }
     })
 }
+//logic to get profile datas
+const getProfile=(req,res)=>{
+    //access acno param from url req
+    const {acno}=req.params
+    users.findOne({acno}).then(user=>{
+        if(user){
+            res.status(200).json({
+                acno:user.acno,
+                uname:user.uname
+            })
+
+        }
+        else{
+            res.status(401).json("user not exist")
+        }
+    })
+}
 module.exports={
-    register,login
+    register,login,getProfile
 }
