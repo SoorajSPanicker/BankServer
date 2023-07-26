@@ -59,6 +59,22 @@ const getProfile=(req,res)=>{
         }
     })
 }
+//logic to get balance
+const getBalance=(req,res)=>{
+    const{acno}=req.params
+    users.findOne({acno}).then(user=>{
+        if(user){
+            res.status(200).json({
+                acno:user.acno,
+                uname:user.uname,
+                balance:user.balance
+            })
+        }
+        else{
+            res.status(401).json("user not exist")
+        }
+    })
+}
 module.exports={
-    register,login,getProfile
+    register,login,getProfile,getBalance
 }
