@@ -10,5 +10,7 @@ router.post('/bankuser/user-login',logic.login)
 router.get('/bankuser/user-profile/:acno',logic.getProfile)
 //balance enquiry
 router.get('/bankuser/bal-enquiry/:acno',logic.getBalance)
+//money transfer
+router.post('/bankuser/money-transfer',logic.moneyTransfer)
 //export router
 module.exports=router

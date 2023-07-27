@@ -64,7 +64,7 @@ const getBalance=(req,res)=>{
     const{acno}=req.params
     users.findOne({acno}).then(user=>{
         if(user){
-            res.status(200).json({
+            res.status(200).json({  //sharing object using json method
                 acno:user.acno,
                 uname:user.uname,
                 balance:user.balance
@@ -75,6 +75,50 @@ const getBalance=(req,res)=>{
         }
     })
 }
+//logic for money transfer
+const moneyTransfer=(req,res)=>{
+    //access all datas from body
+    const {fromAcno,toAcno,psw,amount,date}=req.body
+    //covert string amount to number
+    var amnt=parseInt(amount)
+    //check from user in db
+    users.findOne({acno:fromAcno,psw}).then(fromUser=>{
+        if(fromUser){
+            //check for toUser
+            users.findOne({acno:toAcno}).then(toUser=>{
+                if(toUser){
+                    //from balance check
+                    if(amnt<=fromUser.balance){
+                        fromUser.balance-=amnt
+                        fromUser.transactions.push({type:"DEBIT",amount:amnt,date,user:toUser.uname})
+                        fromUser.save()
+
+                        toUser.balance+=amnt
+                        toUser.transactions.push({type:"CREDIT",amount:amnt,date,user:fromUser.uname})
+                        toUser.save()
+
+                        res.status(200).json({message:"transaction success"})
+
+                    }
+                    else{
+                        res.status(401).json({message:"insufficient balance"})
+                    }
+
+                }
+                else{
+                    res.status(401).json({message:"Invalid credit credentials"})
+                }
+            })
+
+        }
+        else{
+            res.status(401).json({message:"Invalid debit credentials"})
+        }
+    })
+}
+
+
+
 module.exports={
-    register,login,getProfile,getBalance
+    register,login,getProfile,getBalance,moneyTransfer
 }
