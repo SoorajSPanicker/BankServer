@@ -12,5 +12,10 @@ router.get('/bankuser/user-profile/:acno',logic.getProfile)
 router.get('/bankuser/bal-enquiry/:acno',logic.getBalance)
 //money transfer
 router.post('/bankuser/money-transfer',logic.moneyTransfer)
+//transaction history
+router.get('/bankuser/user-history/:acno',logic.history)
+//delete ac
+router.delete('/bankuser/user-delete/:acno',logic.deleteAc)
 //export router
 module.exports=router
+

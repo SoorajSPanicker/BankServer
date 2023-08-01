@@ -116,9 +116,37 @@ const moneyTransfer=(req,res)=>{
         }
     })
 }
+//logic to transaction history
+const history=(req,res)=>{
+    const {acno}=req.params
+    users.findOne({acno}).then(user=>{
+        if(user){
+            res.status(200).json(user.transactions)
+
+        }
+        else{
+            res.status(401).json("user not exist")
+        }
+    })
+}
+
+//logic to delete account
+const deleteAc=(req,res)=>{
+    const{acno}=req.params
+    users.deleteOne({acno}).then(user=>{ //deleteCount=0/1
+        if(user){
+            res.status(200).json("Account Deleted Successfully")
+
+        }
+        else{
+            res.status(401).json("user not exist")
+            
+        }
+    })
+}
 
 
 
 module.exports={
-    register,login,getProfile,getBalance,moneyTransfer
+    register,login,getProfile,getBalance,moneyTransfer,history,deleteAc
 }
