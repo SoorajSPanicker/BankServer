@@ -1,3 +1,6 @@
+//import jwt
+const jwt=require('jsonwebtoken')
+
 //import model
 const users = require("../models/modelcollection")
 
@@ -35,7 +38,15 @@ const login=(req,res)=>{ //body={acno:1000,psw:}
     const {acno,psw}=req.body
     users.findOne({acno,psw}).then(user=>{
         if(user){
-            res.status(200).json(user)
+            //generate token
+            var token=jwt.sign({acno},"secretkey123")
+            // user["token"]=token
+            // res.status(200).json(user)
+            res.status(200).json({
+                acno:user.acno,
+                uname:user.uname,
+                token
+            })
         }
         else{
             res.status(401).json("incorrect account number or password")
